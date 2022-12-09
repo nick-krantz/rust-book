@@ -154,9 +154,21 @@ My general notes from reading [The Rust Book (Brown University)](https://rust-bo
 
 ### Control Flow
 
+
+#### Conditional
+
 - `if` has no parentheses
   - condition must be a `bool`, no truthy or falsy
   - `else` & `else if` work as you'd expect
 - `if` can be used like a javascript ternary:
   `let number = if condition { 5 } else { 6 };`
   - results from each arm of the `if` must be of the same type in the above result
+  
+#### Loops
+
+- 3 types of loops: `loop`, `while`, `for`
+- `loop` - executes loop forever until explicitly stopped.
+  - `break` will stop the loop
+  - `continue` will skip over any remaining code in the iteration and start the loop again.
+  - `loop`s are an expression they can return a value
+- `while` & `for` work as you'd expect
