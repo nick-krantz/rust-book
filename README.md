@@ -172,3 +172,63 @@ My general notes from reading [The Rust Book (Brown University)](https://rust-bo
   - `continue` will skip over any remaining code in the iteration and start the loop again.
   - `loop`s are an expression they can return a value
 - `while` & `for` work as you'd expect
+
+## Chapter 4 - Ownership
+
+- How a Rust program manages memory
+  - Some languages have a garbage collector that runs and frees memory
+  - Some languages the developer has to allocate and then free memory manually
+- If the checks of ownership fail, the program won't compile
+
+### Stack & Heap
+
+- The stack & the heap are both available memory at runtime
+- The stack stores values in the order that it gets them and removes the values in opposite order: LIFO.
+- The heap is less organized as it you request a certain amount of memory and a pointer is returned of the address
+- The stack is faster because there doesn't need to be a search for a place to store the data. The heap needs to find a space big enough for the new data.
+  - Same with accessing data, the pointer must be followed to read the data.
+
+### Ownership Rules
+
+1. Each value in Rust has an owner
+1. There can only be one owner at a time
+1.  When the owner goes out of scope, the value will be dropped.
+
+- `String` example
+  - Complex data type unlike: integers, floating-point numbers, Booleans, characters
+  - Stored on the heap
+  - create a `String` from string literal: `let s = String::from("hello");`
+  - `::` references a method under a namespace
+  - String literals are known at compile time so their size is known, the text is hardcoded directly into the final executable.
+  - `String` type are mutable so they allocate memory in the heap. `String::from` requests the memory it needs
+  - When a variable goes out of scope rust calls `drop` which will un-allocate the memory.
+
+- `Clone`
+  - `.clone()` deep copies heap data as well as stack data
+ 
+- `Copy`
+  - `.copy()` - for values that are stored on the stack
+  - nothing that requires allocation can implement `Copy`.
+  - integers, floating-point numbers, Booleans, characters implement `copy`
+  - tuples can implement `copy` if they only contain types that implement `copy`
+ 
+- Functions
+  - Passing a variable to a function will `move` or `copy` ownership just as an assignment does.
+  - returning values can transfer ownership as well
+  
+### References and Borrowing
+
+- A reference is like a pointer in that it's an address we can follow to access the data stored at that address, but that data is owned by another variable.
+- Unlike a pointer, a reference is guaranteed to point to a valid value of a particular type for the life of that reference.
+- References are denoted with `&`
+- The opposite, a deference is denoted by `*`
+- references are immutable by default
+  - references can be made mutable by `&mut`
+- If you have a mutable reference to a a value, you can have no other references to that value.
+  - This prevents data races, which can happen when:
+    - Two or more pointers access the same data at the same time
+    - At least one of the pointers is used to write to the data
+    - There's no mechanism being used to synchronize the data.
+- You cannot have a mutable reference while there is a immutable reference to the same value in scope
+
+### Slice
