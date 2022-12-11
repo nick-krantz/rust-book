@@ -232,3 +232,10 @@ My general notes from reading [The Rust Book (Brown University)](https://rust-bo
 - You cannot have a mutable reference while there is a immutable reference to the same value in scope
 
 ### Slice
+
+- A reference to a contiguous sequence of elements in a collection (rather than the whole collection).
+- Does not have ownership
+- string slice type is `&str`
+  - string literals are slices
+  - `let s = "Hello, world!";` is type `&str`
+- You can use slices with other data types like arrays
