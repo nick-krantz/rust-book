@@ -239,3 +239,35 @@ My general notes from reading [The Rust Book (Brown University)](https://rust-bo
   - string literals are slices
   - `let s = "Hello, world!";` is type `&str`
 - You can use slices with other data types like arrays
+
+## Chapter 5 - Structs
+
+- Object of attributes, usually related values
+  - similar to `type` or `interface` in TypeScript
+- keyword: `struct`
+- Create an instance by stating the name of the struct, then curly brackets with each key value pair of the struct within it.
+- To get a specific value from a struct, dot notation: `user.name`
+- An entire struct is either all immutable or all mutable. You cannot have only certain fields of a struct be immutable or mutable.
+- Tuple Structs
+  - Provides a name to a set a values but does not use key-value pairs
+  - `struct Color(i32, i32, i32);`
+- Unit-Like Structs
+  - `struct AlwaysEqual` - useful when you need to implement a trait on some type but don’t have any data that you want to store in the type itself. (more to come)
+- Printing struct to screen
+  - add attribute`#[derive(Debug)]` to struct
+  - `println!` with `{:?}` for inline
+  - `println!` with `{:#?}` for pretty-print
+  - `dbg!(&struct_name)` returns ownership but also prints the line number
+- Methods
+  - defined within the context of a struct (or enum or trait)
+  - first parameter is always `self`, the instance of the struct they're being called on.
+  - start with `impl` then the struct name: `impl Rectangle {}`
+  - Methods can take ownership of `self` so `&self` is common.
+  - Methods can have the same name as fields on the struct
+  - use dot notation to invoke
+- Associated Functions
+  - defined within the context of a struct (or enum or trait)
+  - do not take `self` as a first parameter
+  - use `::` to invoke
+  - use `impl` just as in methods
+  
