@@ -271,3 +271,102 @@ My general notes from reading [The Rust Book (Brown University)](https://rust-bo
   - use `::` to invoke
   - use `impl` just as in methods
   
+## Chapter 6 - Enums & Pattern Matching
+
+- Way of saying one value is a possible set of values.
+- Namespaced so use `::`
+Example:
+```rust
+enum IpAddrKind {
+  V4,
+  V6,
+}
+```
+- Assign to a variable
+```rust
+let four = IpAddrKind::V4;
+let six = IpAddrKind::V6;
+```
+- Enums can attach data directly to them, any type of data.
+```rust
+  enum IpAddr {
+    V4(String),
+    V6(String),
+  }
+  
+  let home = IpAddr::V4(String::from("127.0.0.1"));
+
+  let loopback = IpAddr::V6(String::from("::1"));
+```
+- Enums can have different types of data:
+```rust
+enum IpAddr {
+  V4(u8, u8, u8, u8),
+  V6(String),
+}
+
+let home = IpAddr::V4(127, 0, 0, 1);
+
+let loopback = IpAddr::V6(String::from("::1"));
+```
+- Can assign methods to an enum with `impl` just like structs
+
+### Option
+
+```rust
+enum Option<T> {
+  None,
+  Some(T),
+}
+```
+
+- Rust doesn't have null but represents null & non-null by `Option`
+- Also the compiler & the developer to know there is a possibility of not having a value.
+- Requires an explicit case of handling the `None` value.
+
+## Pattern Matching
+
+- `match` keyword
+  - compiler confirms that all possible cases are handled
+  - NO FALL THROUGH
+  - Each arm of the match is an expression & returns a value, therefore match can return a value
+  - `other` is a catch-all:
+  ```rust
+  let dice_roll = 9;
+  match dice_roll {
+    3 => add_fancy_hat(), // when dice_roll is 3
+    7 => remove_fancy_hat(), // when dice_roll is 7
+    other => move_player(other), // all other values
+  }
+  ```
+  - `_` same as `other` but doesn't bind to a value:
+  ```rust
+  let dice_roll = 9;
+  match dice_roll {
+    3 => add_fancy_hat(),
+    7 => remove_fancy_hat(),
+    _ => reroll(),
+  }
+  ```
+  - `match` will move ownership on complex data types. Using a reference will avoid losing ownership of the enum:
+  ```rust
+  let opt: Option<String> = Some(String::from("Hello world"));
+
+  // opt became &opt
+  match &opt {
+      Some(s) => println!("Some: {}", s),
+      None => println!("None!")
+  };
+
+  println!("{:?}", opt);
+  ```
+
+## if let
+
+- The syntax `if let` takes a pattern and an expression separated by an equal sign:
+  ```rust
+  let config_max = Some(3u8);
+  if let Some(max) = config_max { // `config_max` is assigned to `max` and if the it matches the patter (Some(max)) then the code is run within the brackets
+    println!("The maximum is configured to be {}", max);
+  }
+  ```
