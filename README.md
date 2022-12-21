@@ -324,7 +324,7 @@ enum Option<T> {
 - Also the compiler & the developer to know there is a possibility of not having a value.
 - Requires an explicit case of handling the `None` value.
 
-## Pattern Matching
+### Pattern Matching
 
 - `match` keyword
   - compiler confirms that all possible cases are handled
@@ -361,7 +361,7 @@ enum Option<T> {
   println!("{:?}", opt);
   ```
 
-## if let
+### if let
 
 - The syntax `if let` takes a pattern and an expression separated by an equal sign:
   ```rust
@@ -370,3 +370,60 @@ enum Option<T> {
     println!("The maximum is configured to be {}", max);
   }
   ```
+  
+## Chapter 7 - Packages, Crates & Modules
+
+- A package can contain multiple binary crates and optionally one library crate
+
+Module System:
+- Package
+  - a cargo feature that lets you build, test, and share crates
+- Crate
+  - a tree of modules that produces a library or executable
+- Modules & use
+  - Let you control the organization, scope, and privacy of paths
+- Paths
+  - a way of naming an item, such as struct, function, or module
+
+### Packages and Crates
+
+- A crate is the smallest amount of code that the rust compiler considers at at time.
+  - a crate often contains modules
+  - can come in two forms: a binary crate or library crate
+    - binary crates are programs you can compile to an executable that you can run. Each must have a function called main
+    - library crates don't have a main function, and do not compile to a executable. They define functionality meant to be shared with multiple projects.
+- A package is bundle of one or more crates that provides a set of functionality, contains Cargo.toml file. 
+  - Cargo is a package that contains the binary crate for command line tool
+  
+### Controlling Scope & Privacy
+
+Modules Cheat Sheet:
+- Start from the crate root (usually `src/lib.rs` or `src/main.rs`)
+- Declaring modules (`mod garden;`), the compiler will look:
+  - Inline (within curly brackets, replacing the semi-colon)
+  - In the file `src/garden.rs`
+  - In the file `src/garden/mod.rs`
+- Declaring submodules
+  - Can be declared in any file but the crate root.
+  - You might declare `mod vegetables;` in `src/garden.rs`, the compiler will look in:
+    - Inline (within curly brackets, replacing the semi-colon)
+    - In the file `src/garden/vegetables.rs`
+    - In the file `src/garden/vegetables/mod.rs`
+- Paths to code in modules
+  - Once a module is a part of your crate, you can refer to code in that module from anywhere else in that same crate. Ex: an `Asparagus` type in the garden vegetables module would be found at `crate::garden::vegetables::Asparagus`.
+- Private vs public: 
+  - Code within a module is private by default.
+  - To make a module public declare it with `pub mod` instead of just `mod`. Use `pub` for items within the module to make them public as well.
+- The `use` keyword:
+  - Within a scope the `use` keyword creates shortcuts to items to reduce repetition of long paths.
+  - In any scope that can refer to `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use crate::garden::vegetables::Asparagus;` and from then on you only need to write `Asparagus` to make use of that type in the scope.
+
+### Paths for Referring to an Item in the Module Tree
+
+A path can take two forms:
+- An absolute path, a full path starting from the crate root. External crates starts with the crate name, from the current crate, starts with the literal `crate`.
+- A relative path, starts from the current module and uses `self`, `super` or an identifier in the current module.
+- Absolute and relative paths are separated by `::`.
+
+`super`
+- refers the parent module
